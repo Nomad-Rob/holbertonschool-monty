@@ -1,79 +1,64 @@
 #include "monty.h"
 /**
- *get_opc - gets the function
- *@opcode: requested function
- *@cp_stack: linear data structure
- *@line: line number
- * Return: function pointer or EXIT_FAILURE if it fails
+ *main - main function interpretes files
+ *@argc: number of argv
+ *@argv: arguments
+ *Return: EXIT_SUCCESS or EXIT_FAILURE if the function fails
  */
-void get_opc(char *opcode, stack_t **cp_stack, unsigned int line)
+int main(int argc, char *argv[])
 {
-	int index = 0;
+	stack_t *stack = NULL;
+	FILE *fd;
+	char *arg;
 
-	instruction_t function[] = {
-		{"pall", _pall},
-		{"pint",  _pint},
-		{"pop", _pop},
-		{"swap", _swap},
-		{"add", _add},
-		{"nop", _nop},
-		{NULL, NULL}
-	};
-
-	while (function[index].opcode)
+	if (argc != 2)
 	{
-		if (strcmp(function[index].opcode, opcode) == 0)
-		{
-			function[index].f(cp_stack, line);
-			break;
-		}
-		index++;
-	}
-
-	if (function[index].opcode == NULL)
-	{
-		fprintf(stderr, "L%d: unknown instruction %s\n", line, opcode);
+		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-}
-/**
- *_free - free stack memory
- *@head: pointer to the top of the stack
- *Return: void
- */
-void _free(stack_t *head)
-{
-	stack_t *temp;
 
-	while (head != NULL)
+	arg = argv[1];
+	fd = fopen(arg, "r");
+	if (fd == NULL)
 	{
-		temp = head->next;
-		free(head);
-		head = temp;
+		fprintf(stderr, "Error: Can't open file %s\n", arg);
+		exit(EXIT_FAILURE);
 	}
+
+	get_code(fd, &stack);
+	_free(stack);
+	fclose(fd);
+
+	exit(EXIT_SUCCESS);
 }
+
 /**
- *_isnumber - checks for numbers
- *@opcode: string to check
- *Return: 1 if true, 0 otherwise
+ * get_code - gets the command
+ * @file: file to read to gets the command
+ * @stack: linear data structure
+ *
+ * Return: void
  */
-int _isnumber(char *opcode)
+void get_code(FILE *file, stack_t **stack)
 {
-	unsigned int index = 0;
+	char *opcode, *token = NULL;
+	size_t size = 0;
+	int counter = 0;
 
-	if (opcode == NULL)
-		return (0);
-
-	while (opcode[index])
+	while (getline(&opcode, &size, file) != -1)
 	{
-		if (opcode[0] == '-')
-		{
-			index++;
+		counter++;
+		token = strtok(opcode, "\n\t\r ");
+		if (token == NULL || *token == '#')
 			continue;
+
+		if (strcmp(token, "push") == 0)
+		{
+			token = strtok(NULL, "\n\t\r ");
+			_push(token, stack, counter);
 		}
-		if (!isdigit(opcode[index]))
-			return (0);
-		index++;
+		else
+			get_opc(token, stack, counter);
 	}
-	return (1);
+	free(opcode);
 }
