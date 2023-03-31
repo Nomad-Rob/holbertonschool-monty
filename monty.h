@@ -40,6 +40,16 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-
+void get_opc(char *opcode, stack_t **cp_stack, unsigned int line);
+void _free(stack_t *head);
+void _push(char *opcode, stack_t **top_stack, unsigned int line);
+void _pall(stack_t **sstack, unsigned int __attribute__((unused)) line);
+int _isnumber(char *opcode);
+void get_code(FILE *file, stack_t **tpstack);
+void _pint(stack_t **sstack, unsigned int __attribute((unused)) line);
+void _pop(stack_t **stack, unsigned int line);
+void _swap(stack_t **stack, unsigned int line);
+void _add(stack_t **stack, unsigned int line);
+void _nop(stack_t **stack, unsigned int line);
 
 #endif
