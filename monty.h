@@ -1,7 +1,6 @@
 #ifndef MONTY_H
 #define MONTY_H
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,3 +52,4 @@ void _add(stack_t **stack, unsigned int line);
 void _nop(stack_t **stack, unsigned int line);
 
 #endif
+ 
