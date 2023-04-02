@@ -15,7 +15,7 @@ void get_opc(char *opcode, stack_t **cp_stack, unsigned int line)
 		{"pint",  _pint},
 		{"pop", _pop},
 		{"swap", _swap},
-		/*{"add", _add},*/
+		{"add", _add},
 		/*{"nop", _nop},*/
 		{NULL, NULL}
 	};
