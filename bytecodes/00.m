@@ -1,4 +1,4 @@
-push 1223
-push 2232
-push 3324
+push 1
+push 2
+push 3
 pall
