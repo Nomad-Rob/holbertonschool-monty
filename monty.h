@@ -52,4 +52,3 @@ void _add(stack_t **stack, unsigned int line);
 void _nop(stack_t **stack, unsigned int line);
 
 #endif
- 
